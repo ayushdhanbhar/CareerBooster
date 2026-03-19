@@ -49,6 +49,14 @@
 - Visual metrics and progress indicators
 - Downloadable analysis reports (JSON)
 
+### 8. **🎓 Personalized Learning Resources**
+- Smart recommendations for skill gaps
+- Curated online courses (Coursera, Udemy)
+- YouTube tutorial recommendations
+- Personalized learning paths by role
+- Estimated learning time and strategies
+- Exportable learning plans
+
 ## 📋 Available Job Roles
 
 The system analyzes resumes against these job categories:

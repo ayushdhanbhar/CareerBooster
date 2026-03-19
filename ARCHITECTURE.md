@@ -194,6 +194,32 @@ Configuration Settings:
 
 ---
 
+#### learning_resources_recommender.py
+```
+LearningResourcesRecommender
+├── LEARNING_RESOURCES (Dict[skill] → courses & tutorials)
+├── get_recommendations(missing_skills, num_resources) → Dict
+├── create_personalized_learning_path(missing_skills, role) → Dict
+├── get_skill_difficulty_level(skill) → str
+└── _get_generic_recommendations(skill, resource_type, num) → List
+```
+
+**Responsibilities:**
+- Maintain learning resource database
+- Generate personalized course recommendations
+- Create custom learning paths by role
+- Match skills to appropriate resources
+
+**Features:**
+- 100+ skills with curated resources
+- Coursera & Udemy course links
+- YouTube tutorial recommendations
+- Personalized learning strategies
+- Estimated learning time calculations
+- Difficulty level assessment
+
+---
+
 ### 3. **Frontend Module**
 
 #### app.py
@@ -274,9 +300,15 @@ Suggestion Generation
     ├─ ResumeAnalyzer._generate_suggestions()
     │
     ▼
+Learning Resources Generation
+    │
+    ├─ LearningResourcesRecommender.get_recommendations()
+    ├─ LearningResourcesRecommender.create_personalized_learning_path()
+    │
+    ▼
 Results Display
     │
-    └─ Streamlit Dashboard
+    └─ Streamlit Dashboard (with Learning Resources Tab)
 ```
 
 ## Scoring Algorithm
@@ -400,12 +432,16 @@ Where:
 2. **Update Skills**: Modify lists in `skill_extractor.py`
 3. **Custom Reports**: Add methods to `utils.py`
 4. **New Analysis Methods**: Extend `resume_analyzer.py`
+5. **Add Learning Resources**: Update `LEARNING_RESOURCES` dict in `learning_resources_recommender.py`
+6. **Customize Learning Paths**: Modify `create_personalized_learning_path()` logic
 
 ### Integration Points
 1. **API Access**: All modules have public methods
 2. **Batch Processing**: `BatchAnalyzer` for multiple resumes
 3. **Report Export**: JSON, CSV, HTML formats
 4. **Custom UI**: Replace Streamlit with Flask/FastAPI
+5. **Learning Platform Integration**: Connect to Coursera/Udemy APIs for real-time data
+6. **Certification Tracking**: Integrate with course completion APIs
 
 ## Testing Strategy
 
@@ -429,15 +465,21 @@ Where:
 
 ## Future Enhancements
 
+### ✅ Completed Features
+1. **Skill Development Paths**: Training recommendations with Learning Resources Recommender
+   - Personalized learning paths by role
+   - Curated online courses (Coursera, Udemy)
+   - YouTube tutorial recommendations
+   - Estimated learning times
+
 ### Planned Features
 1. **Resume Optimization Engine**: Auto-suggest resume rewrites
-2. **Skill Development Paths**: Training recommendations
-3. **Job Market Analysis**: Trending skills by role
-4. **Interview Preparation**: Role-specific tips
-5. **Portfolio Integration**: Link to GitHub/portfolio
-6. **Real-time Feedback**: As-you-type resume scoring
-7. **Multi-language Support**: Support multiple languages
-8. **API Backend**: RESTful API for integrations
+2. **Job Market Analysis**: Trending skills by role
+3. **Interview Preparation**: Role-specific tips
+4. **Portfolio Integration**: Link to GitHub/portfolio
+5. **Real-time Feedback**: As-you-type resume scoring
+6. **Multi-language Support**: Support multiple languages
+7. **API Backend**: RESTful API for integrations
 
 ### Potential Improvements
 - Fine-tune BERT for specific domains
@@ -446,7 +488,10 @@ Where:
 - Add salary expectations
 - Integration with job boards
 - ATS (Applicant Tracking System) simulation
+- Live course data integration with platform APIs
+- Progress tracking and completion monitoring
+- Skill mastery assessment tools
 
 ---
 
-*Architecture Documentation - ResumeBooster v1.0.0*
+*Architecture Documentation - ResumeBooster v1.0.1*

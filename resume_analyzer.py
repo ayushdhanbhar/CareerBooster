@@ -9,6 +9,7 @@ from document_processor import DocumentProcessor
 from skill_extractor import SkillExtractor
 from bert_embedder import BertEmbedder
 from role_profile_builder import RoleProfileBuilder
+from learning_resources_recommender import LearningResourcesRecommender
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -78,6 +79,17 @@ class ResumeAnalyzer:
                 resume_skills
             )
             
+            # Generate learning resource recommendations
+            missing_skills = skill_analysis['weaknesses'][:10]  # Top 10 missing skills
+            learning_resources = LearningResourcesRecommender.get_recommendations(
+                missing_skills, num_resources=3
+            )
+            
+            # Create personalized learning path
+            learning_path = LearningResourcesRecommender.create_personalized_learning_path(
+                missing_skills, role
+            )
+            
             analysis = {
                 'role': role,
                 'resume_score': score,
@@ -98,6 +110,8 @@ class ResumeAnalyzer:
                     'samples_analyzed': role_profile.get('sample_count', 0)
                 },
                 'suggestions': suggestions,
+                'learning_resources': learning_resources,
+                'learning_path': learning_path,
                 'detailed_metrics': {
                     'technical_skill_match': len([s for s in skill_analysis['strengths'] if s in resume_skills['technical']]),
                     'soft_skill_match': len([s for s in skill_analysis['strengths'] if s in resume_skills['soft']]),

@@ -262,6 +262,132 @@ def display_skill_breakdown(resume_skills: dict, role_skills: dict):
             for skill in role_skills['soft_skills'][:8]:
                 st.markdown(f"- {skill}")
 
+def display_learning_resources(learning_resources: dict, learning_path: dict):
+    """Display personalized learning resource recommendations"""
+    st.markdown("### 🎓 Personalized Learning Resources")
+    st.markdown("*Learn skills required for your target role through curated online courses and tutorials*")
+    
+    if not learning_resources:
+        st.info("No skill gaps detected - your resume already covers required competencies!")
+        return
+    
+    # Display learning path overview
+    st.markdown("#### 📚 Your Learning Path")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric(
+            "Skills to Learn",
+            learning_path.get('total_skills_to_learn', 0)
+        )
+    
+    with col2:
+        st.metric(
+            "Estimated Hours",
+            f"{learning_path.get('estimated_total_hours', 0)}+ hours"
+        )
+    
+    with col3:
+        st.metric(
+            "Target Role",
+            learning_path.get('role', 'Unknown')
+        )
+    
+    # Display learning strategy
+    st.markdown("#### 🎯 Recommended Learning Strategy")
+    for strategy in learning_path.get('learning_strategy', []):
+        st.markdown(f"- {strategy}")
+    
+    st.markdown("---")
+    
+    # Display skills and resources
+    st.markdown("#### 📖 Learning Resources by Skill")
+    
+    for skill, resources in learning_resources.items():
+        with st.expander(f"📚 {skill.title()}", expanded=False):
+            # Display courses
+            st.markdown(f"**🎓 Online Courses**")
+            
+            courses = resources.get('courses', [])
+            if courses:
+                for i, course in enumerate(courses, 1):
+                    st.markdown(f"""
+                    **{i}. {course['title']}**
+                    - Platform: {course.get('platform', 'Unknown')}
+                    - Duration: {course.get('duration', 'Self-paced')}
+                    - Level: {course.get('level', 'Varies')}
+                    - Rating: ⭐ {course.get('rating', 'N/A')}
+                    - [View Course]({course.get('url', '#')})
+                    """)
+            else:
+                st.info("No specific courses found. Search on Coursera or Udemy.")
+            
+            st.markdown("---")
+            
+            # Display YouTube tutorials
+            st.markdown(f"**🎬 YouTube Tutorials**")
+            
+            tutorials = resources.get('youtube_tutorials', [])
+            if tutorials:
+                for i, tutorial in enumerate(tutorials, 1):
+                    st.markdown(f"""
+                    **{i}. {tutorial['title']}**
+                    - Channel: {tutorial.get('channel', 'Unknown')}
+                    - Duration: {tutorial.get('duration', 'Varies')}
+                    - Level: {tutorial.get('level', 'Varies')}
+                    
+                    Search on YouTube: "{tutorial['title']}" or visit the {tutorial.get('channel', 'channel')} channel
+                    """)
+            else:
+                st.info("No tutorials found. Search YouTube directly.")
+    
+    st.markdown("---")
+    
+    # Learning tips
+    st.markdown("#### 💡 Learning Tips")
+    st.markdown("""
+    1. **Start with Fundamentals**: Begin with beginner-level courses before advancing
+    2. **Mix Theory & Practice**: Combine video courses with hands-on projects
+    3. **Consistent Learning**: Dedicate 30 minutes daily for better retention
+    4. **Build Projects**: Create projects to demonstrate your new skills
+    5. **Update Resume**: Add newly acquired skills to your resume
+    6. **Join Communities**: Engage with online communities for peer support
+    """)
+    
+    # Export learning plan option
+    if st.button("📥 Export Learning Plan"):
+        plan_text = f"""
+PERSONALIZED LEARNING PLAN FOR {learning_path.get('role', 'UNKNOWN').upper()} ROLE
+{'=' * 70}
+
+SKILLS TO DEVELOP:
+{chr(10).join([f"- {skill}" for skill in learning_resources.keys()])}
+
+ESTIMATED TIME: {learning_path.get('estimated_total_hours', 0)}+ hours
+
+LEARNING STRATEGY:
+{chr(10).join(learning_path.get('learning_strategy', []))}
+
+DETAILED RESOURCES:
+{chr(10).join([
+    f"""
+{skill.upper()}:
+Courses:
+{chr(10).join([f'  - {c["title"]} ({c.get("duration", "N/A")})' for c in learning_resources[skill].get('courses', [])])}
+YouTube Tutorials:
+{chr(10).join([f'  - {t["title"]} ({t.get("channel", "Unknown")})' for t in learning_resources[skill].get('youtube_tutorials', [])])}
+"""
+    for skill in learning_resources.keys()
+])}
+"""
+        st.download_button(
+            label="Export Learning Plan as Text",
+            data=plan_text,
+            file_name=f"learning_plan_{learning_path.get('role', 'role')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+            mime="text/plain"
+        )
+
 def main():
     """Main application logic"""
     
@@ -348,11 +474,12 @@ def main():
         display_score(analysis['resume_score'])
         
         # Create tabs for different sections
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
             "📊 Overview",
             "✅ Strengths",
             "⚠️ Weaknesses",
             "💡 Suggestions",
+            "🎓 Learning Resources",
             "📈 Detailed Metrics"
         ])
         
@@ -394,6 +521,12 @@ def main():
             display_suggestions(analysis['suggestions'])
         
         with tab5:
+            display_learning_resources(
+                analysis.get('learning_resources', {}),
+                analysis.get('learning_path', {})
+            )
+        
+        with tab6:
             st.markdown("#### Detailed Analysis Metrics")
             display_metrics(analysis['score_breakdown'], analysis['role_profile'])
             
@@ -423,25 +556,107 @@ def main():
         
         # Download report button
         st.markdown("---")
+        st.markdown("### 📥 Download Your Complete Report")
         
-        if st.button("📥 Download Analysis Report"):
-            report = {
-                'timestamp': datetime.now().isoformat(),
-                'role': analysis['role'],
-                'resume_score': analysis['resume_score'],
-                'strengths': analysis['strengths'],
-                'weaknesses': analysis['weaknesses'],
-                'suggestions': analysis['suggestions'],
-                'metrics': analysis['detailed_metrics']
-            }
-            
-            report_json = json.dumps(report, indent=2)
-            st.download_button(
-                label="Download JSON Report",
-                data=report_json,
-                file_name=f"resume_analysis_{analysis['role']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
-                mime="application/json"
-            )
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("📄 Download PDF Report", use_container_width=True):
+                try:
+                    from utils import ReportGenerator
+                    
+                    # Generate PDF
+                    pdf_bytes = ReportGenerator.generate_pdf_report(analysis)
+                    
+                    st.download_button(
+                        label="📥 Save PDF Report",
+                        data=pdf_bytes,
+                        file_name=f"resume_analysis_{analysis['role']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                        mime="application/pdf",
+                        key="pdf_download"
+                    )
+                except ImportError:
+                    st.error("❌ PDF export requires reportlab. Install with: pip install reportlab Pillow")
+                except Exception as e:
+                    st.error(f"Error generating PDF: {str(e)}")
+        
+        with col2:
+            if st.button("📋 Download JSON Report", use_container_width=True):
+                report = {
+                    'timestamp': datetime.now().isoformat(),
+                    'role': analysis['role'],
+                    'resume_score': analysis['resume_score'],
+                    'strengths': analysis['strengths'],
+                    'weaknesses': analysis['weaknesses'],
+                    'suggestions': analysis['suggestions'],
+                    'metrics': analysis['detailed_metrics']
+                }
+                
+                report_json = json.dumps(report, indent=2)
+                st.download_button(
+                    label="📥 Save JSON Report",
+                    data=report_json,
+                    file_name=f"resume_analysis_{analysis['role']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    mime="application/json",
+                    key="json_download"
+                )
+        
+        with col3:
+            if st.button("📊 Download Learning Plan", use_container_width=True):
+                learning_path = analysis.get('learning_path', {})
+                learning_resources = analysis.get('learning_resources', {})
+                
+                if learning_resources:
+                    plan_text = f"""PERSONALIZED LEARNING PLAN FOR {learning_path.get('role', 'UNKNOWN').upper()} ROLE
+{'=' * 80}
+
+GENERATED: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+OVERVIEW:
+- Target Role: {learning_path.get('role', 'Unknown')}
+- Skills to Learn: {learning_path.get('total_skills_to_learn', 0)}
+- Estimated Learning Time: {learning_path.get('estimated_total_hours', 0)}+ hours
+- Resume Score: {analysis.get('resume_score', 0)}/10
+
+LEARNING STRATEGY:
+{chr(10).join([f"{i}. {step}" for i, step in enumerate(learning_path.get('learning_strategy', []), 1)])}
+
+RECOMMENDED RESOURCES BY SKILL:
+{'=' * 80}
+"""
+                    for skill, resources in learning_resources.items():
+                        plan_text += f"\n{skill.upper()}\n{'-' * 40}\n"
+                        
+                        courses = resources.get('courses', [])
+                        if courses:
+                            plan_text += "ONLINE COURSES:\n"
+                            for i, course in enumerate(courses, 1):
+                                plan_text += f"  {i}. {course.get('title', 'Unknown')}\n"
+                                plan_text += f"     Platform: {course.get('platform', 'Unknown')}\n"
+                                plan_text += f"     Duration: {course.get('duration', 'N/A')}\n"
+                                plan_text += f"     Level: {course.get('level', 'N/A')}\n"
+                                if course.get('rating'):
+                                    plan_text += f"     Rating: ⭐ {course['rating']}/5\n"
+                                plan_text += "\n"
+                        
+                        tutorials = resources.get('youtube_tutorials', [])
+                        if tutorials:
+                            plan_text += "YOUTUBE TUTORIALS:\n"
+                            for i, tutorial in enumerate(tutorials, 1):
+                                plan_text += f"  {i}. {tutorial.get('title', 'Unknown')}\n"
+                                plan_text += f"     Channel: {tutorial.get('channel', 'Unknown')}\n"
+                                plan_text += f"     Duration: {tutorial.get('duration', 'N/A')}\n"
+                                plan_text += f"     Level: {tutorial.get('level', 'N/A')}\n\n"
+                    
+                    st.download_button(
+                        label="📥 Save Learning Plan",
+                        data=plan_text,
+                        file_name=f"learning_plan_{analysis['role']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                        mime="text/plain",
+                        key="learning_download"
+                    )
+                else:
+                    st.info("No learning resources found for this analysis.")
     
     else:
         # Welcome message

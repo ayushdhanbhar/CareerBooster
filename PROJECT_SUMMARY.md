@@ -48,29 +48,38 @@ I have successfully designed and developed the **ResumeBooster** application - a
    - Skill extraction from dataset
    - Profile caching and reuse
 
+7. **learning_resources_recommender.py** (400+ lines)
+   - Personalized learning resource recommendations
+   - 100+ skills with curated resources database
+   - Online course recommendations (Coursera, Udemy)
+   - YouTube tutorial recommendations
+   - Personalized learning path generation
+   - Skill difficulty assessment
+
+
 ### Utility & Configuration Files
 
-7. **utils.py** (300+ lines)
+8. **utils.py** (300+ lines)
    - Report generation (JSON, CSV, HTML)
    - Batch analysis capabilities
    - Resume validation
    - Statistics computation
 
-8. **config.py** (100+ lines)
+9. **config.py** (100+ lines)
    - Centralized configuration
    - Scoring weights
    - Model settings
    - Validation rules
    - Logging configuration
 
-9. **requirements.txt** (15 dependencies)
-   - All Python package requirements
-   - Version-pinned for reproducibility
-   - Streamlit, transformers, torch, pdfplumber, etc.
+10. **requirements.txt** (15 dependencies)
+    - All Python package requirements
+    - Version-pinned for reproducibility
+    - Streamlit, transformers, torch, pdfplumber, etc.
 
 ### Documentation Files
 
-10. **README.md** (600+ lines)
+11. **README.md** (600+ lines)
     - Comprehensive project documentation
     - 24+ available job roles
     - Installation instructions
@@ -79,7 +88,7 @@ I have successfully designed and developed the **ResumeBooster** application - a
     - API reference
     - Customization guide
 
-11. **QUICKSTART.md** (300+ lines)
+12. **QUICKSTART.md** (300+ lines)
     - 5-minute setup guide
     - First-time user checklist
     - Scenario-based tutorials
@@ -87,7 +96,7 @@ I have successfully designed and developed the **ResumeBooster** application - a
     - FAQ section
     - Troubleshooting quick fixes
 
-12. **ARCHITECTURE.md** (400+ lines)
+13. **ARCHITECTURE.md** (400+ lines)
     - System architecture diagram
     - Module architecture
     - Data flow explanation
@@ -97,7 +106,14 @@ I have successfully designed and developed the **ResumeBooster** application - a
     - Security & privacy considerations
     - Extensibility points
 
-13. **examples.py** (400+ lines)
+13. **DEPLOYMENT.md** (300+ lines)
+    - Deployment guide
+    - Cloud hosting instructions
+    - Streamlit Cloud setup
+    - Container deployment
+    - Environment configuration
+
+14. **examples.py** (400+ lines)
     - 7 complete usage examples
     - Single resume analysis
     - Multiple role analysis
@@ -106,6 +122,24 @@ I have successfully designed and developed the **ResumeBooster** application - a
     - Report generation
     - PDF extraction
     - Available roles listing
+
+15. **learning_resources_examples.py** (400+ lines)
+    - 7 comprehensive learning resource examples
+    - Simple skill recommendations
+    - Personalized learning paths
+    - Difficulty assessment
+    - Role-specific learning plans
+    - Learning resource export
+    - Career transition planning
+
+16. **LEARNING_RESOURCES_GUIDE.md** (300+ lines)
+    - Complete learning resources documentation
+    - Feature overview and benefits
+    - Resource database description
+    - Usage instructions
+    - Learning tips and strategies
+    - Estimated learning times
+    - FAQ and customization guide
 
 ---
 
@@ -162,18 +196,34 @@ I have successfully designed and developed the **ResumeBooster** application - a
 - ✓ Role selection dropdown
 - ✓ PDF file upload interface
 - ✓ Real-time analysis display
-- ✓ 5 tabbed result sections:
+- ✓ 6 tabbed result sections:
   - Overview with metrics
   - Strengths display
   - Weaknesses display
   - Suggestions display
+  - **Learning Resources (NEW)**
   - Detailed metrics
 - ✓ Visual score indicator
 - ✓ Progress bar
 - ✓ Color-coded feedback
 - ✓ Download report functionality
 
-### 8. Advanced Utilities ✅
+### 8. 🎓 Personalized Learning Resources (NEW) ✅
+- ✓ Intelligent skill gap analysis
+- ✓ Comprehensive resource database (100+ skills)
+- ✓ Curated online courses:
+  - Coursera recommendations
+  - Udemy recommendations
+  - Real course links and pricing
+- ✓ YouTube tutorial recommendations
+- ✓ Personalized learning paths by role
+- ✓ Estimated learning time calculations
+- ✓ Difficulty level assessment
+- ✓ Learning strategy recommendations
+- ✓ Exportable learning plans
+- ✓ Multiple skill types supported
+
+### 9. Advanced Utilities ✅
 - ✓ JSON report generation
 - ✓ CSV report export
 - ✓ HTML report generation
@@ -182,7 +232,7 @@ I have successfully designed and developed the **ResumeBooster** application - a
 - ✓ Resume validation
 - ✓ Resume statistics
 
-### 9. Comprehensive Documentation ✅
+### 10. Comprehensive Documentation ✅
 - ✓ User guide (README.md)
 - ✓ Quick start guide
 - ✓ Architecture documentation
@@ -190,6 +240,7 @@ I have successfully designed and developed the **ResumeBooster** application - a
 - ✓ Troubleshooting guide
 - ✓ Example scripts
 - ✓ Code comments
+- ✓ Learning resources guide
 
 ---
 
@@ -303,7 +354,15 @@ streamlit run app.py
    - Specific skill gaps identified
    - Personalized improvement plans
 
-6. **No Cloud Upload**
+6. **🎓 Personalized Learning Resources** (NEW)
+   - Curated course recommendations
+   - YouTube tutorial suggestions
+   - Personalized learning paths
+   - Estimated learning times
+   - Skill-to-resource mapping
+   - Multiple platform support
+
+7. **No Cloud Upload**
    - All processing local
    - Complete privacy
    - No data persistence
@@ -434,28 +493,32 @@ This implementation demonstrates:
 
 ## 📝 Files Summary
 
-### Code Files (6)
+### Code Files (7)
 1. app.py - Streamlit interface
 2. resume_analyzer.py - Core analysis
 3. document_processor.py - PDF handling
 4. skill_extractor.py - Skill analysis
 5. bert_embedder.py - Embeddings
 6. role_profile_builder.py - Profiles
+7. learning_resources_recommender.py - Learning recommendations
 
 ### Utility Files (2)
 1. utils.py - Utilities & reports
 2. config.py - Configuration
 
-### Documentation (4)
+### Documentation (7)
 1. README.md - Main documentation
 2. QUICKSTART.md - Quick start guide
 3. ARCHITECTURE.md - System design
-4. examples.py - Usage examples
+4. LEARNING_RESOURCES_GUIDE.md - Learning resources guide
+5. DEPLOYMENT.md - Deployment instructions
+6. examples.py - Usage examples
+7. learning_resources_examples.py - Learning resource examples
 
 ### Configuration (1)
 1. requirements.txt - Dependencies
 
-**Total: 13 files, 2000+ lines of production code**
+**Total: 17 files, 2500+ lines of production code**
 
 ---
 
