@@ -10,8 +10,8 @@ This document explains the role of each file in the ResumeBooster project and wh
 
 | File | Role | Purpose |
 |------|------|---------|
-| **app.py** | Main UI Interface | Streamlit web application for user interaction, resume upload, and results display |
-
+| **app.py**  | Main UI Interface | Streamlit web application for user interaction, resume upload, and results display |
+|      |      |         |
 ---
 
 ## ⚙️ Backend Files
